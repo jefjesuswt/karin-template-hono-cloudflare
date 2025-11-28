@@ -1,12 +1,14 @@
 import { KarinFactory } from "@karin-js/core";
 import { HonoAdapter } from "@karin-js/platform-hono";
+import { AppController } from "./app/app.controller";
 
-async function bootstrap() {
-  const app = await KarinFactory.create(new HonoAdapter(), {
-    scan: "./src/**/*.controller.ts",
-  });
+const app = await KarinFactory.create(new HonoAdapter(), {
+  scan: false,
+  controllers: [AppController],
+});
 
-  app.listen(3000);
-}
+await app.init();
 
-bootstrap();
+export default {
+  fetch: (app.getHttpAdapter() as any).fetch,
+};
